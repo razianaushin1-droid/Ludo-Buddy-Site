@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join a Game — Ludo Buddy</title>
+  <meta name="description" content="You're invited to a Ludo Buddy game. Open the app to join, or get it free on Google Play.">
+  <meta name="theme-color" content="#1c3a9e">
+  <meta property="og:title" content="Join my Ludo Buddy game!">
+  <meta property="og:description" content="Tap to join the room. Free on Android: Ludo and Snakes & Ladders, online and offline.">
+  <meta property="og:image" content="img/home.jpg">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=4">
+  <style>
+    .join { text-align: center; color: #fff; padding: 40px 16px 60px; max-width: 520px; margin: 0 auto; }
+    .join h1 { font-size: clamp(30px, 7vw, 44px); margin: 18px 0 8px; text-shadow: 0 4px 0 rgba(7,16,58,.6); }
+    .join p { color: rgba(255,255,255,.88); font-size: 17px; margin: 0 0 22px; }
+    .code {
+      display: inline-block; font-size: clamp(44px, 14vw, 72px); font-weight: 900; letter-spacing: 12px;
+      padding: 10px 16px 10px 28px; border-radius: 22px; color: #0a1440;
+      background: linear-gradient(#fff1b8, #ffc93c, #e59a1a); box-shadow: 0 6px 0 #8a4f0a, 0 18px 40px rgba(0,0,0,.35);
+      margin-bottom: 28px;
+    }
+    .join .cta { justify-content: center; flex-direction: column; align-items: center; gap: 14px; }
+    .join .btn { min-width: 260px; justify-content: center; }
+    .steps-small { margin-top: 30px; color: rgba(255,255,255,.8); font-size: 15px; line-height: 1.7; }
+  </style>
+</head>
+<body>
+<header class="wrap top">
+  <a class="brand" href="./">
+    <svg class="brand-mark" viewBox="0 0 30 30" aria-hidden="true">
+      <rect x="1" y="1" width="28" height="28" rx="7" fill="#fff"/>
+      <circle cx="9" cy="9" r="3" fill="#e63a3a"/><circle cx="21" cy="9" r="3" fill="#2db24a"/>
+      <circle cx="15" cy="15" r="3" fill="#1b2340"/>
+      <circle cx="9" cy="21" r="3" fill="#2b7de0"/><circle cx="21" cy="21" r="3" fill="#f7c21c"/>
+    </svg>
+    LUDO <span class="buddy">BUDDY</span>
+  </a>
+</header>
+
+<main class="join">
+  <span class="kicker">You're invited</span>
+  <h1>Join my game!</h1>
+  <p>Room code</p>
+  <div class="code" id="code">····</div>
+  <div class="cta">
+    <a class="btn primary" id="open" href="#">Open in Ludo Buddy</a>
+    <a class="btn" id="get" href="https://play.google.com/store/apps/details?id=buddy.ludo.game">Get Ludo Buddy free on Google Play</a>
+  </div>
+  <div class="steps-small">
+    Don't have the app? Install it from Google Play, open it, and you'll join this room automatically.<br>
+    Or open <b>Online Match → Join with a code</b> and type the code above.
+  </div>
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Ludo Buddy by LunarSprint</span>
+  <span class="links">
+    <a href="./">Home</a>
+    <a href="privacy.html">Privacy policy</a>
+  </span>
+</footer>
+
+<script>
+  // Room codes are 4 letters/digits; anything else is ignored.
+  const raw = new URLSearchParams(location.search).get("code") || "";
+  const code = raw.trim().toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4);
+  const PKG = "buddy.ludo.game";
+  // Play Store link carries the room code so the app can join after install.
+  const play = "https://play.google.com/store/apps/details?id=" + PKG +
+    (code.length === 4 ? "&referrer=" + encodeURIComponent("room=" + code) : "");
+  document.getElementById("get").href = play;
+
+  if (code.length === 4) {
+    document.getElementById("code").textContent = code;
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    // Android: an intent URL opens the app, or falls back to the Play listing.
+    const intentUrl = "intent://join/" + code + "#Intent;scheme=ludobuddy;package=" + PKG +
+      ";S.browser_fallback_url=" + encodeURIComponent(play) + ";end";
+    const open = document.getElementById("open");
+    open.href = isAndroid ? intentUrl : play;
+    if (isAndroid) setTimeout(() => { location.href = intentUrl; }, 400);
+  } else {
+    document.getElementById("open").style.display = "none";
+    document.querySelector(".join p").textContent = "This invite link is missing its room code.";
+  }
+</script>
+</body>
+</html>

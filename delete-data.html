@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Delete My Data — Ludo Buddy</title>
+  <meta name="description" content="How to delete your Ludo Buddy data, and request deletion of data we hold.">
+  <meta name="theme-color" content="#1c3a9e">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+<header class="wrap top">
+  <a class="brand" href="./">
+    <svg class="brand-mark" viewBox="0 0 30 30" aria-hidden="true">
+      <rect x="1" y="1" width="28" height="28" rx="7" fill="#fff"/>
+      <circle cx="9" cy="9" r="3" fill="#e63a3a"/><circle cx="21" cy="9" r="3" fill="#2db24a"/>
+      <circle cx="15" cy="15" r="3" fill="#1b2340"/>
+      <circle cx="9" cy="21" r="3" fill="#2b7de0"/><circle cx="21" cy="21" r="3" fill="#f7c21c"/>
+    </svg>
+    LUDO <span class="buddy">BUDDY</span>
+  </a>
+  <nav aria-label="Main">
+    <a href="./">Home</a>
+    <a href="privacy.html">Privacy policy</a>
+    <a href="delete-data.html">Delete my data</a>
+  </nav>
+</header>
+
+<main class="wrap doc">
+  <p class="label">Ludo Buddy · buddy.ludo.game</p>
+  <h1>Delete my data</h1>
+  <p>Ludo Buddy doesn't use accounts, so there's no account to close. This page explains how to delete what's on your phone and how to ask us to delete the little we hold. You don't need the app installed to make a request.</p>
+
+  <h2>1. Data on your phone</h2>
+  <p>Your board style, sound setting and tutorial progress are stored only on your device. To delete them:</p>
+  <ul>
+    <li>Android Settings → Apps → Ludo Buddy → Storage → <strong>Clear storage</strong>, or</li>
+    <li>uninstall Ludo Buddy.</li>
+  </ul>
+  <p>We can't see or delete this data for you, because it never reaches us.</p>
+
+  <h2>2. Data we hold</h2>
+  <ul>
+    <li><strong>Online matches</strong> (display name, moves, emotes): deleted automatically 24 hours after each room is created, so there's usually nothing left to delete.</li>
+    <li><strong>Your anonymous player ID</strong> (if you played online) and any <strong>reports</strong> you made or that were made about you (kept up to 12 months).</li>
+    <li><strong>Analytics</strong> linked to a random ID for your installation, deleted automatically after 2 months.</li>
+  </ul>
+  <p>None of this is linked to your name, email or Google account, so we need your IDs to find it:</p>
+  <ol>
+    <li>Open Ludo Buddy.</li>
+    <li>On the home screen, tap <strong>Privacy</strong>.</li>
+    <li>Tap <strong>Copy my IDs</strong> and paste them below.</li>
+  </ol>
+  <p class="dim">Already uninstalled? Send the request anyway. Without IDs we can't find analytics or player records, but they expire on their own as described above, and we'll delete any emails we hold from you.</p>
+  <p class="dim">Ad data is handled by Google. To reset or delete your advertising ID, open Android Settings → Privacy → Ads. To manage data Google holds about you, visit your <a href="https://myaccount.google.com/data-and-privacy">Google Account</a>.</p>
+
+  <h2>3. Request deletion</h2>
+  <form id="deletion" novalidate>
+    <label class="field">Your email (so we can confirm)
+      <input id="email" type="email" autocomplete="email" required>
+    </label>
+    <label class="field">Your IDs (from Home → Privacy → Copy my IDs)
+      <textarea id="ids" placeholder="Analytics ID: …&#10;Online player ID: …"></textarea>
+    </label>
+    <div>
+      <p style="margin:0 0 6px;font-weight:800;font-size:14px">What should we delete?</p>
+      <label class="check"><input type="checkbox" name="scope" value="online" checked> Online player ID, match records and reports</label>
+      <label class="check"><input type="checkbox" name="scope" value="analytics" checked> Analytics for this installation</label>
+      <label class="check"><input type="checkbox" name="scope" value="emails"> Emails and support conversations with us</label>
+    </div>
+    <label class="field">Anything else? (optional)
+      <textarea id="message"></textarea>
+    </label>
+    <input id="website" class="hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <label class="check"><input id="confirm" type="checkbox"> I understand deleted data can't be recovered.</label>
+    <button type="submit">SEND DELETION REQUEST</button>
+    <p id="status" role="status" aria-live="polite"></p>
+  </form>
+  <p>We confirm by email and delete within 30 days. We use your email only to answer this request, and delete it afterwards.</p>
+
+  <h2>4. Questions</h2>
+  <p>Email <a href="mailto:lunarsprintapps@gmail.com">lunarsprintapps@gmail.com</a> or read the <a href="privacy.html">privacy policy</a>.</p>
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Ludo Buddy by LunarSprint</span>
+  <span class="links">
+    <a href="./">Home</a>
+    <a href="privacy.html">Privacy policy</a>
+    <a href="delete-data.html">Delete my data</a>
+    <a href="mailto:lunarsprintapps@gmail.com">Contact</a>
+  </span>
+</footer>
+
+<script>
+  // Where requests go. With FORM_ENDPOINT empty, the visitor's email app opens with the request
+  // filled in. To receive requests without email, set FORM_ENDPOINT to a form-backend URL that
+  // accepts JSON POSTs (e.g. a Formspree form or your own endpoint).
+  const CONTACT_EMAIL = "lunarsprintapps@gmail.com";
+  const FORM_ENDPOINT = "";
+
+  const form = document.getElementById("deletion");
+  const status = document.getElementById("status");
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (document.getElementById("website").value) return; // bots fill hidden fields
+    const email = document.getElementById("email").value.trim();
+    const ids = document.getElementById("ids").value.trim();
+    const scope = [...form.querySelectorAll('input[name="scope"]:checked')].map(c => c.value);
+    const message = document.getElementById("message").value.trim();
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.textContent = "Please enter a valid email."; return; }
+    if (!scope.length) { status.textContent = "Pick at least one thing to delete."; return; }
+    if (!document.getElementById("confirm").checked) { status.textContent = "Please tick the confirmation box."; return; }
+
+    const request = {
+      app: "Ludo Buddy (buddy.ludo.game)",
+      email, ids: ids || "(not provided)", delete: scope, message,
+      submitted: new Date().toISOString(),
+    };
+
+    if (FORM_ENDPOINT) {
+      status.textContent = "Sending...";
+      try {
+        const res = await fetch(FORM_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify(request),
+        });
+        if (!res.ok) throw new Error(res.status);
+        form.reset();
+        status.textContent = "Request received. We'll confirm by email within 30 days.";
+      } catch {
+        status.textContent = "Couldn't send. Please email " + CONTACT_EMAIL + " instead.";
+      }
+      return;
+    }
+
+    const body = [
+      "Please delete my Ludo Buddy data.", "",
+      "App: " + request.app,
+      "Reply-to email: " + email,
+      "Delete: " + scope.join(", "),
+      "", ids ? ids : "IDs: (not provided)",
+      message ? "\nNotes: " + message : "",
+    ].join("\n");
+    location.href = "mailto:" + CONTACT_EMAIL +
+      "?subject=" + encodeURIComponent("Ludo Buddy data deletion request") +
+      "&body=" + encodeURIComponent(body);
+    status.textContent = "Your email app should open with the request filled in. Just press send.";
+  });
+</script>
+</body>
+</html>
